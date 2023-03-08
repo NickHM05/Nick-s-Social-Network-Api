@@ -1,3 +1,4 @@
+// change more references and functions to users, thoughts. 
 const router = require('express').Router();
 const {
   getCourses,
@@ -5,7 +6,7 @@ const {
   createCourse,
   updateCourse,
   deleteCourse,
-} = require('../../controllers/courseController.js');
+} = require('../../controllers/thoughtController.js');
 
 // /api/courses
 router.route('/').get(getCourses).post(createCourse);

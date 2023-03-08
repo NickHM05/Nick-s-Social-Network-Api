@@ -1,3 +1,4 @@
+// change more references and functions to users, thoughts. 
 const router = require('express').Router();
 const {
   getStudents,
@@ -6,7 +7,7 @@ const {
   deleteStudent,
   addAssignment,
   removeAssignment,
-} = require('../../controllers/studentController');
+} = require('../../controllers/userController');
 
 // /api/students
 router.route('/').get(getStudents).post(createStudent);
