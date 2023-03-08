@@ -1,55 +1,54 @@
 const { ObjectId } = require('mongoose').Types;
-const { Users, Thoughts } = require('../models');
-// chane
+const { User, Thoughts } = require('../models');
 
-// Aggregate function to get the number of students overall
-const headCount = async () =>
-  Student.aggregate()
-    .count('studentCount')
-    .then((numberOfStudents) => numberOfStudents);
+// Aggregate function to get the number of users overall
+const userCount = async () =>
+  User.aggregate()
+    .count('userCount')
+    .then((numberOfUsers) => numberOfUsers);
 
 // Aggregate function for getting the overall grade using $avg
-const grade = async (studentId) =>
-  Student.aggregate([
-    // only include the given student by using $match
-    { $match: { _id: ObjectId(studentId) } },
+const grade = async (userId) =>
+  User.aggregate([
+    // only include the given user by using $match
+    { $match: { _id: ObjectId(userId) } },
     {
       $unwind: '$assignments',
     },
     {
       $group: {
-        _id: ObjectId(studentId),
+        _id: ObjectId(userId),
         overallGrade: { $avg: '$assignments.score' },
       },
     },
   ]);
 
 module.exports = {
-  // Get all students
+  // Get all Users
   getStudents(req, res) {
-    Student.find()
-      .then(async (students) => {
-        const studentObj = {
-          students,
-          headCount: await headCount(),
+    Users.find()
+      .then(async (UsersUsed) => {
+        const userObj = {
+          UsersUsed,
+          userCount: await userCount(),
         };
-        return res.json(studentObj);
+        return res.json(userObj);
       })
       .catch((err) => {
         console.log(err);
         return res.status(500).json(err);
       });
   },
-  // Get a single student
+  // Get a single User
   getSingleStudent(req, res) {
-    Student.findOne({ _id: req.params.studentId })
+    User.findOne({ _id: req.params.userId })
       .select('-__v')
-      .then(async (student) =>
-        !student
-          ? res.status(404).json({ message: 'No student with that ID' })
+      .then(async (userFirst) =>
+        !userFirst
+          ? res.status(404).json({ message: 'No user(First) with that ID' })
           : res.json({
-              student,
-              grade: await grade(req.params.studentId),
+              userFirst,
+              grade: await grade(req.params.userId),
             })
       )
       .catch((err) => {
@@ -57,30 +56,30 @@ module.exports = {
         return res.status(500).json(err);
       });
   },
-  // create a new student
+  // create a new user
   createStudent(req, res) {
-    Student.create(req.body)
-      .then((student) => res.json(student))
+    User.create(req.body)
+      .then((UsersUsed) => res.json(UsersUsed))
       .catch((err) => res.status(500).json(err));
   },
-  // Delete a student and remove them from the course
+  // Delete a user and remove them from the Thoughts function. 
   deleteStudent(req, res) {
-    Student.findOneAndRemove({ _id: req.params.studentId })
-      .then((student) =>
-        !student
-          ? res.status(404).json({ message: 'No such student exists' })
-          : Course.findOneAndUpdate(
-              { students: req.params.studentId },
-              { $pull: { students: req.params.studentId } },
+    User.findOneAndRemove({ _id: req.params.userId })
+      .then((userFirst) =>
+        !userFirst
+          ? res.status(404).json({ message: 'No such user exists' })
+          : Thoughts.findOneAndUpdate(
+              { userFirst: req.params.userId },
+              { $pull: { UsersUsed: req.params.userId } },
               { new: true }
             )
       )
-      .then((course) =>
-        !course
+      .then((Thought) =>
+        !Thought
           ? res.status(404).json({
-              message: 'Student deleted, but no courses found',
+              message: 'User deleted, but no Thoughts found',
             })
-          : res.json({ message: 'Student successfully deleted' })
+          : res.json({ message: 'User successfully deleted' })
       )
       .catch((err) => {
         console.log(err);
@@ -88,37 +87,37 @@ module.exports = {
       });
   },
 
-  // Add an assignment to a student
+  // Add an assignment to a user
   addAssignment(req, res) {
     console.log('You are adding an assignment');
     console.log(req.body);
-    Student.findOneAndUpdate(
-      { _id: req.params.studentId },
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
       { $addToSet: { assignments: req.body } },
       { runValidators: true, new: true }
     )
-      .then((student) =>
-        !student
+      .then((userFirst) =>
+        !userFirst
           ? res
               .status(404)
-              .json({ message: 'No student found with that ID :(' })
-          : res.json(student)
+              .json({ message: 'No user found with that ID :(' })
+          : res.json(userFirst)
       )
       .catch((err) => res.status(500).json(err));
   },
-  // Remove assignment from a student
+  // Remove assignment from a user
   removeAssignment(req, res) {
-    Student.findOneAndUpdate(
-      { _id: req.params.studentId },
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
       { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
       { runValidators: true, new: true }
     )
-      .then((student) =>
-        !student
+      .then((userFirst) =>
+        !userFirst
           ? res
               .status(404)
-              .json({ message: 'No student found with that ID :(' })
-          : res.json(student)
+              .json({ message: 'No user found with that ID :(' })
+          : res.json(userFirst)
       )
       .catch((err) => res.status(500).json(err));
   },

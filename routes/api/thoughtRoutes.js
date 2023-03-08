@@ -13,7 +13,7 @@ router.route('/').get(getCourses).post(createCourse);
 
 // /api/courses/:courseId
 router
-  .route('/:courseId')
+  .route('/:thoughtId')
   .get(getSingleCourse)
   .put(updateCourse)
   .delete(deleteCourse);

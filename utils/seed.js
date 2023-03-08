@@ -6,10 +6,10 @@ connection.on('error', (err) => err);
 connection.once('open', async () => {
   console.log('connected');
 
-  // Drop existing courses
+  // Drop existing thoughts
   await Thoughts.deleteMany({});
 
-  // Drop existing students
+  // Drop existing Users
   await User.deleteMany({});
 
   let users = [
