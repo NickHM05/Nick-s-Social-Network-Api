@@ -1,0 +1,11 @@
+{
+  "name": "nick-s-social-network-api",
+  "version": "1.0.0",
+  "description": "A great application for creating an instance of a social network web application. ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nicholas Mamberger",
+  "license": "MIT"
+}
