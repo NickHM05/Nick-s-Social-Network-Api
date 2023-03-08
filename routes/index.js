@@ -1,4 +1,5 @@
 const router = require('express').Router();
+// will import all of the API routes from /api.index.js
 const apiRoutes = require('./api');
 
 router.use('/api', apiRoutes);
