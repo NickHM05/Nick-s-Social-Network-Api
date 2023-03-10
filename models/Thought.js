@@ -12,10 +12,8 @@ const thoughtSchema = new Schema(
     },
     createdat: {
       type: Date,
-      default: Date.now(),
-      // need a date formater get method
-      // get: timestamp => {
-      // }
+      default: Date.now,
+      get: createdatVal => moment(createdatVal).format("MMM DD, YYYY")
     },
     username: {
       type: String,
@@ -39,6 +37,10 @@ const thoughtSchema = new Schema(
   }
 );
 
-const Thoughts = model('Thoughts', thoughtSchema);
+// thoughtSchema.virtual('reactionCount').get(function() {
+//   return this.reactions.length;
+// })
 
-module.exports = Thoughts;
+const Thought = model('Thought', thoughtSchema);
+
+module.exports = Thought;

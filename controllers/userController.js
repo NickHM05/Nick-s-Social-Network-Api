@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongoose').Types;
-const { User, Thoughts } = require('../models');
+const { User, Thought } = require('../models');
 
 // Aggregate function to get the number of users overall
 const userCount = async () =>
@@ -27,10 +27,10 @@ const grade = async (userId) =>
 module.exports = {
   // Get all Users
   getStudents(req, res) {
-    Users.find()
-      .then(async (UsersUsed) => {
+    User.find()
+      .then(async (users) => {
         const userObj = {
-          UsersUsed,
+          users,
           userCount: await userCount(),
         };
         return res.json(userObj);
@@ -44,11 +44,11 @@ module.exports = {
   getSingleStudent(req, res) {
     User.findOne({ _id: req.params.userId })
       .select('-__v')
-      .then(async (userFirst) =>
-        !userFirst
+      .then(async (user) =>
+        !user
           ? res.status(404).json({ message: 'No user(First) with that ID' })
           : res.json({
-              userFirst,
+              user,
               grade: await grade(req.params.userId),
             })
       )
@@ -60,23 +60,23 @@ module.exports = {
   // create a new user
   createStudent(req, res) {
     User.create(req.body)
-      .then((UsersUsed) => res.json(UsersUsed))
+      .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
   // Delete a user and remove them from the Thoughts function. 
   deleteStudent(req, res) {
     User.findOneAndRemove({ _id: req.params.userId })
-      .then((userFirst) =>
-        !userFirst
+      .then((user) =>
+        !user
           ? res.status(404).json({ message: 'No such user exists' })
-          : Thoughts.findOneAndUpdate(
-              { userFirst: req.params.userId },
-              { $pull: { UsersUsed: req.params.userId } },
+          : Thought.findOneAndUpdate(
+              { users: req.params.userId },
+              { $pull: { users: req.params.userId } },
               { new: true }
             )
       )
-      .then((Thought) =>
-        !Thought
+      .then((thought) =>
+        !thought
           ? res.status(404).json({
               message: 'User deleted, but no Thoughts found',
             })
@@ -97,12 +97,12 @@ module.exports = {
       { $addToSet: { assignments: req.body } },
       { runValidators: true, new: true }
     )
-      .then((userFirst) =>
-        !userFirst
+      .then((user) =>
+        !user
           ? res
               .status(404)
               .json({ message: 'No user found with that ID :(' })
-          : res.json(userFirst)
+          : res.json(user)
       )
       .catch((err) => res.status(500).json(err));
   },
@@ -113,12 +113,12 @@ module.exports = {
       { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
       { runValidators: true, new: true }
     )
-      .then((userFirst) =>
-        !userFirst
+      .then((user) =>
+        !user
           ? res
               .status(404)
               .json({ message: 'No user found with that ID :(' })
-          : res.json(userFirst)
+          : res.json(user)
       )
       .catch((err) => res.status(500).json(err));
   },

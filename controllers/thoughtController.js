@@ -1,27 +1,27 @@
-const { Thoughts, User } = require('../models');
+const { Thought, User } = require('../models');
 // const Thought = require('../models/Thoughts');
 
 module.exports = {
   // Get all Thoughts
   getCourses(req, res) {
-    Thoughts.find()
+    Thought.find()
       .then((thoughts) => res.json(thoughts))
       .catch((err) => res.status(500).json(err));
   },
   // Get a course
   getSingleCourse(req, res) {
-    Thoughts.findOne({ _id: req.params.thoughtId })
+    Thought.findOne({ _id: req.params.thoughtId })
       .select('-__v')
       .then((thought) =>
         !thought
-          ? res.status(404).json({ message: 'No course with that ID' })
+          ? res.status(404).json({ message: 'No thought with that ID' })
           : res.json(thought)
       )
       .catch((err) => res.status(500).json(err));
   },
   // Create a course
   createCourse(req, res) {
-    Thoughts.create(req.body)
+    Thought.create(req.body)
       .then((thought) => res.json(thought))
       .catch((err) => {
         console.log(err);
@@ -30,7 +30,7 @@ module.exports = {
   },
   // Delete a course
   deleteCourse(req, res) {
-    Thoughts.findOneAndDelete({ _id: req.params.thoughtId })
+    Thought.findOneAndDelete({ _id: req.params.thoughtId })
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: 'No course with that ID' })
@@ -41,7 +41,7 @@ module.exports = {
   },
   // Update a course
   updateCourse(req, res) {
-    Thoughts.findOneAndUpdate(
+    Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $set: req.body },
       { runValidators: true, new: true }
