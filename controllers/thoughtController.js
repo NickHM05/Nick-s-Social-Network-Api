@@ -17,6 +17,7 @@ const thoughtController = {
         res.status(400).json(err);
       });
   },
+  
 //GET thought by id
   getThoughtById({ params }, res) {
     Thought.findOne({ _id: params.thoughtId })
@@ -37,6 +38,7 @@ const thoughtController = {
         res.status(400).json(err);
       });
   },
+
 //POST a thought
   createThought({ params, body }, res) {
     console.log(body);
@@ -57,6 +59,7 @@ const thoughtController = {
       })
       .catch((err) => res.json(err));
   },
+
 //PUT an update to the thought
   updateThought({ params, body }, res) {
     Thought.findOneAndUpdate({ _id: params.thoughtId }, body, {
@@ -72,7 +75,8 @@ const thoughtController = {
       })
       .catch((err) => res.json(err));
   },
-//DELETE thought
+
+//DELETE the thought
   deleteThought({ params }, res) {
     Thought.findOneAndDelete({ _id: params.thoughtId })
       .then((deletedThought) => {

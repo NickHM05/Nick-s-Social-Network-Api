@@ -50,12 +50,14 @@ const userController = {
         res.status(400).json(err);
       });
   },
+  
 //POST a user
   createUser({ body }, res) {
     User.create(body)
       .then((dbUserData) => res.json(dbUserData))
       .catch((err) => res.status(400).json(err));
   },
+
 //PUT an update to the user
   updateUser({ params, body }, res) {
     User.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
@@ -68,6 +70,7 @@ const userController = {
       })
       .catch((err) => res.status(400).json(err));
   },
+
 //DELETE a user
   deleteUser({ params }, res) {
     User.findOneAndDelete({ _id: params.id })
@@ -98,6 +101,7 @@ const userController = {
       })
       .catch((err) => res.json(err));
   },
+
 //DELETE a friend
   deleteFriend({ params }, res) {
     User.findOneAndUpdate(

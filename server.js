@@ -12,6 +12,7 @@ app.use(express.static('public'));
 app.use(require('./routes'));
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialmediaapp', {
+  //'mongodb://127.0.0.1:27017/socialmediaapp', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });

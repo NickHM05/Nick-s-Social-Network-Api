@@ -34,11 +34,17 @@ connection.once('open', async () => {
       thoughtText: 'Hi i am also a new user',
     }
   ];
-  // Add students to the collection and await the results
+  // Add users to the collection and await the results
   await User.collection.insertMany(users);
 
-  // Add courses to the collection and await the results
+  // Add thoughts to the collection and await the results
   await Thought.collection.insertMany(thoughts);
+
+  // Drop existing thoughts
+  await Thought.deleteMany({});
+
+  // Drop existing Users
+  await User.deleteMany({});
 
   // Log out the seed data to indicate what should appear in the database
   console.info('Seeding complete! 🌱');
