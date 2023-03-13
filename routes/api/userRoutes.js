@@ -1,24 +1,23 @@
-// change more references and functions to users, thoughts. 
+// changed more references and functions to users, thoughts. 
 const router = require('express').Router();
-const {
-  getStudents,
-  getSingleStudent,
-  createStudent,
-  deleteStudent,
-  addAssignment,
-  removeAssignment,
+const { 
+  getAllUsers, 
+  getUserById, 
+  createUser, 
+  updateUser, 
+  deleteUser, 
+  createFriend, 
+  deleteFriend 
 } = require('../../controllers/userController');
 
-// /api/students
-router.route('/').get(getStudents).post(createStudent);
+// /api/users
+// /api/users in JSON user {"username":"anonymous", "email":"anonymous email"}
+router.route('/').get(getAllUsers).post(createUser);
 
-// /api/students/:studentId
-router.route('/:userId').get(getSingleStudent).delete(deleteStudent);
+// /api/users/userid#
+router.route('/:id').get(getUserById).put(updateUser).delete(deleteUser);
 
-// /api/students/:studentId/assignments
-router.route('/:userId/assignments').post(addAssignment);
-
-// /api/students/:studentId/assignments/:assignmentId
-router.route('/:userId/assignments/:assignmentId').delete(removeAssignment);
+// /api/users/user1Id/friends/user2Id
+router.route('/:userId/friends/:friendId').post(createFriend).delete(deleteFriend);
 
 module.exports = router;

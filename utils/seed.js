@@ -1,3 +1,4 @@
+// after seed this file is not needed to be used. Also data file was reworked and deleted. 
 const connection = require('../config/connection');
 const { Thought, User } = require('../models');
 

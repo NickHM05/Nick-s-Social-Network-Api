@@ -1,9 +1,9 @@
-// change more references and functions to users, thoughts. 
+// thought routes and user routes are set here
 const router = require('express').Router();
-const thoughtRoutes = require('./thoughtRoutes');
 const userRoutes = require('./userRoutes');
+const thoughtRoutes = require('./thoughtRoutes')
 
-router.use('/thoughts', thoughtRoutes);
 router.use('/users', userRoutes);
+router.use('/thoughts', thoughtRoutes);
 
 module.exports = router;
